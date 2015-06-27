@@ -17,6 +17,7 @@
 		D117C91D1B3F021600C82D30 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D117C91B1B3F021600C82D30 /* LaunchScreen.xib */; };
 		D117C9291B3F021600C82D30 /* CM_MapsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D117C9281B3F021600C82D30 /* CM_MapsTests.m */; };
 		D117C9351B3F034A00C82D30 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = D117C9341B3F034A00C82D30 /* Podfile */; };
+		D1FE765C1B3F0A6600212136 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1FE765B1B3F0A6600212136 /* CoreLocation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		D117C9271B3F021600C82D30 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D117C9281B3F021600C82D30 /* CM_MapsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CM_MapsTests.m; sourceTree = "<group>"; };
 		D117C9341B3F034A00C82D30 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; };
+		D1FE765B1B3F0A6600212136 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		DC01091D5A3D5268CE2680ED /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "CM-Maps/Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -55,6 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D1FE765C1B3F0A6600212136 /* CoreLocation.framework in Frameworks */,
 				B9D4D4F13AC103BCC7ACA610 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -81,6 +84,7 @@
 		9351A073EA6AA8866279E57F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D1FE765B1B3F0A6600212136 /* CoreLocation.framework */,
 				100CBBB1C53EBDE50E024D8E /* libPods.a */,
 			);
 			name = Frameworks;

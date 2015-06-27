@@ -9,32 +9,73 @@
 #import "Start.h"
 @import GoogleMaps;
 
+#define         nLocalizing     0
+#define         nLocalized      1
+
+//Localization
+float                   mlatitude;
+float                   mlongitude;
+static int              iLocalizeState = nLocalizing;
+
 @implementation Start {
-    GMSMapView *mapView_;
+    GMSMapView  *mapView;
+    GMSMarker   *markerLocation;
 }
-//---------------------------------------
+/**********************************************************************************************/
+#pragma mark - Initialization methods
+/**********************************************************************************************/
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Create a GMSCameraPosition that tells the map to display the
-    // coordinate -33.86,151.20 at zoom level 6.
-    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:-33.86
-                                                            longitude:151.20
-                                                                 zoom:15];
-    mapView_ = [GMSMapView mapWithFrame:CGRectZero camera:camera];
-    mapView_.myLocationEnabled = YES;
-    self.view = mapView_;
     
-    // Creates a marker in the center of the map.
-    GMSMarker *marker = [[GMSMarker alloc] init];
-    marker.position = CLLocationCoordinate2DMake(-33.86, 151.20);
-    marker.title = @"Sydney";
-    marker.snippet = @"Australia";
-    marker.map = mapView_;
+    //Location
+    self.locationManager                    = [[CLLocationManager alloc] init];
+    self.locationManager.delegate           = self;
+    self.location                           = [[CLLocation alloc] init];
+    self.locationManager.desiredAccuracy    = kCLLocationAccuracyBest;
+    [self.locationManager  requestWhenInUseAuthorization];
+    [self.locationManager startUpdatingLocation];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
+/**********************************************************************************************/
+#pragma mark - Maps methods
+/**********************************************************************************************/
+- (void) paintMap {
+    [mapView removeFromSuperview];
+    GMSCameraPosition *camera   = [GMSCameraPosition cameraWithLatitude:mlatitude longitude:mlongitude zoom:14.0];
+    mapView                     = [GMSMapView mapWithFrame:CGRectZero camera:camera];
+    mapView.frame               = CGRectMake(0, 20, self.view.frame.size.width, self.view.frame.size.height-20);
+    mapView.myLocationEnabled   = YES;
+    [self.view addSubview:mapView];
+}
+/**********************************************************************************************/
+#pragma mark - Localization
+/**********************************************************************************************/
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
+    self.location = locations.lastObject;
+    NSLog(@"didUpdateLocation!");
+    CLGeocoder * geoCoder = [[CLGeocoder alloc] init];
+    [geoCoder reverseGeocodeLocation:self.locationManager.location completionHandler:^(NSArray *placemarks, NSError *error) {
+        for (CLPlacemark *placemark in placemarks) {
+            NSString *addressName = [placemark name];
+            NSString *city = [placemark locality];
+            NSString *administrativeArea = [placemark administrativeArea];
+            NSString *country  = [placemark country];
+            NSString *countryCode = [placemark ISOcountryCode];
+            NSLog(@"name is %@ and locality is %@ and administrative area is %@ and country is %@ and country code %@", addressName, city, administrativeArea, country, countryCode);
+        }
+        mlatitude = self.locationManager.location.coordinate.latitude;
+        mlongitude = self.locationManager.location.coordinate.longitude;
+        NSLog(@"mlatitude = %f", mlatitude);
+        NSLog(@"mlongitude = %f", mlongitude);
+        if (iLocalizeState == nLocalizing) {
+            [self paintMap];
+            iLocalizeState = nLocalized;
+        }
+    }];
+    
+}
 @end
