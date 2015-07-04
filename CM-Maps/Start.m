@@ -17,6 +17,12 @@ float                   mlatitude;
 float                   mlongitude;
 static int              iLocalizeState = nLocalizing;
 
+NSMutableArray          *maPlacesTitle;
+NSMutableArray          *maPlacesSnippet;
+NSMutableArray          *maPlacesLat;
+NSMutableArray          *maPlacesLng;
+
+
 @implementation Start {
     GMSMapView          *mapView;
     GMSMarker           *markerLocation;
@@ -35,11 +41,20 @@ static int              iLocalizeState = nLocalizing;
     self.locationManager.desiredAccuracy    = kCLLocationAccuracyBest;
     [self.locationManager  requestWhenInUseAuthorization];
     [self.locationManager startUpdatingLocation];
+    
+    [self initPlaces];
 }
-
+//------------------------------------------------------------
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+//------------------------------------------------------------
+- (void)initPlaces {
+    maPlacesLat     = [[NSMutableArray alloc] initWithObjects: @"20.674815", @"20.710549", nil];
+    maPlacesLng     = [[NSMutableArray alloc] initWithObjects: @"-103.387295", @"-103.412525", nil];
+    maPlacesTitle   = [[NSMutableArray alloc] initWithObjects: @"Minerva", @"Andares", nil];
+    maPlacesSnippet = [[NSMutableArray alloc] initWithObjects: @"Av Vallarta", @"Zapopan", nil];
 }
 /**********************************************************************************************/
 #pragma mark - Maps methods
@@ -50,23 +65,32 @@ static int              iLocalizeState = nLocalizing;
     mapView                     = [GMSMapView mapWithFrame:CGRectZero camera:camera];
     mapView.frame               = CGRectMake(0, 20, self.view.frame.size.width, self.view.frame.size.height-20);
     mapView.myLocationEnabled   = YES;
-    [self paintMarker];
+    
     [self.view addSubview:mapView];
 }
 //------------------------------------------------------------
 - (void) paintMarker {
     GMSMarker *marker       = [[GMSMarker alloc] init];
     marker.position         = camera.target;
-    
-    /*CGFloat lat = (CGFloat)[mmaPlacesLat[i] floatValue];
-    CGFloat lng = (CGFloat)[mmaPlacesLng[i] floatValue];
-    position = CLLocationCoordinate2DMake(lat, lng);
-    markerLocation      = [GMSMarker markerWithPosition:position];*/
-    
     marker.title            = @"UAG";
     marker.snippet          = @"Clase de Maestría";
     marker.appearAnimation = kGMSMarkerAnimationPop;
     marker.map = mapView;
+    
+    CLLocationCoordinate2D position;
+    NSLog(@"maPlacesTitle.count %d", (int)maPlacesTitle.count);
+    for (int i = 0; i<maPlacesTitle.count; i++)
+    {
+        CGFloat lat                     = (CGFloat)[maPlacesLat[i] floatValue];
+        CGFloat lng                     = (CGFloat)[maPlacesLng[i] floatValue];
+        NSLog(@"Marker lat %f, long %f", lat, lng);
+        position                        = CLLocationCoordinate2DMake(lat, lng);
+        markerLocation                  = [GMSMarker markerWithPosition:position];
+        markerLocation.title            = maPlacesTitle[i];
+        markerLocation.snippet          = maPlacesSnippet[i];
+        markerLocation.appearAnimation  = kGMSMarkerAnimationPop;
+        markerLocation.map              = mapView;
+    }
 }
 /**********************************************************************************************/
 #pragma mark - Localization
@@ -90,6 +114,7 @@ static int              iLocalizeState = nLocalizing;
         NSLog(@"mlongitude = %f", mlongitude);
         if (iLocalizeState == nLocalizing) {
             [self paintMap];
+            [self paintMarker];
             iLocalizeState = nLocalized;
         }
     }];
