@@ -18,8 +18,9 @@ float                   mlongitude;
 static int              iLocalizeState = nLocalizing;
 
 @implementation Start {
-    GMSMapView  *mapView;
-    GMSMarker   *markerLocation;
+    GMSMapView          *mapView;
+    GMSMarker           *markerLocation;
+    GMSCameraPosition   *camera;
 }
 /**********************************************************************************************/
 #pragma mark - Initialization methods
@@ -45,11 +46,27 @@ static int              iLocalizeState = nLocalizing;
 /**********************************************************************************************/
 - (void) paintMap {
     [mapView removeFromSuperview];
-    GMSCameraPosition *camera   = [GMSCameraPosition cameraWithLatitude:mlatitude longitude:mlongitude zoom:14.0];
+    camera                      = [GMSCameraPosition cameraWithLatitude:mlatitude longitude:mlongitude zoom:14.0];
     mapView                     = [GMSMapView mapWithFrame:CGRectZero camera:camera];
     mapView.frame               = CGRectMake(0, 20, self.view.frame.size.width, self.view.frame.size.height-20);
     mapView.myLocationEnabled   = YES;
+    [self paintMarker];
     [self.view addSubview:mapView];
+}
+//------------------------------------------------------------
+- (void) paintMarker {
+    GMSMarker *marker       = [[GMSMarker alloc] init];
+    marker.position         = camera.target;
+    
+    /*CGFloat lat = (CGFloat)[mmaPlacesLat[i] floatValue];
+    CGFloat lng = (CGFloat)[mmaPlacesLng[i] floatValue];
+    position = CLLocationCoordinate2DMake(lat, lng);
+    markerLocation      = [GMSMarker markerWithPosition:position];*/
+    
+    marker.title            = @"UAG";
+    marker.snippet          = @"Clase de Maestría";
+    marker.appearAnimation = kGMSMarkerAnimationPop;
+    marker.map = mapView;
 }
 /**********************************************************************************************/
 #pragma mark - Localization
