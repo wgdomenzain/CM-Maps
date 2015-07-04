@@ -12,6 +12,8 @@
 @interface Start : UIViewController<CLLocationManagerDelegate>
 @property (strong, nonatomic)   CLLocationManager   *locationManager;
 @property (strong, nonatomic)   CLLocation          *location;
+@property (strong, nonatomic) IBOutlet UILabel *lblCountry;
+@property (strong, nonatomic) IBOutlet UILabel *lblName;
 
 @end
 
