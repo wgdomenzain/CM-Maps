@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import <Google/Analytics.h>
 @import GoogleMaps;
 
 @interface AppDelegate ()
@@ -17,7 +18,19 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    //Google Maps
     [GMSServices provideAPIKey:@"AIzaSyDrnejaeEqQfg5DWKXpYvCYO3l69JOhNG0"];
+    
+    //Google Analytics
+    // Configure tracker from GoogleService-Info.plist.
+    NSError *configureError;
+    [[GGLContext sharedInstance] configureWithError:&configureError];
+    NSAssert(!configureError, @"Error configuring Google services: %@", configureError);
+    
+    // Optional: configure GAI options.
+    GAI *gai = [GAI sharedInstance];
+    gai.trackUncaughtExceptions = YES;  // report uncaught exceptions
+    gai.logger.logLevel = kGAILogLevelVerbose;  // remove before app release
     return YES;
 }
 

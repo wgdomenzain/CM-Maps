@@ -7,6 +7,7 @@
 //
 
 #import "Start.h"
+
 @import GoogleMaps;
 
 #define         nLocalizing     0
@@ -47,6 +48,13 @@ NSMutableArray          *maPlacesLng;
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+//------------------------------------------------------------
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker set:kGAIScreenName value:@"CM-Maps:Start"];
+    [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 //------------------------------------------------------------
 - (void)initPlaces {

@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
+#import <Google/Analytics.h>
 
 @interface Start : UIViewController<CLLocationManagerDelegate>
 @property (strong, nonatomic)   CLLocationManager   *locationManager;
